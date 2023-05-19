@@ -17,23 +17,19 @@
         ngModel
         required
         minlength="5"
+        #nome="ngModel"
       />
-      <div
-        *ngIf="
-          (f.controls['nome']?.invalid && f.controls['nome']?.touched) ||
-          f.controls['nome']?.dirty
-        "
-      >
-        <span
-          class="erro__texto"
-          *ngIf="f.controls['nome']?.errors?.['required']"
-          >O campo nome deve ser preenchido</span
-        >
-        <span
-          class="erro__texto"
-          *ngIf="f.controls['nome']?.errors?.['minlength']"
-          >Nome deve ter no mínimo 5 caracteres</span
-        >
+      <div *ngIf="(nome?.invalid && nome?.touched) || nome?.dirty">
+        <app-mensagem
+          *ngIf="nome?.errors?.['required']"
+          mensagem="O campo nome deve ser
+        preenchido"
+        ></app-mensagem>
+        <app-mensagem
+          *ngIf="nome?.errors?.['minllength']"
+          mensagem="Nome deve ter no
+        mínimo 5 caracteres"
+        ></app-mensagem>
       </div>
     </div>
     <div class="formulario__dupla">
@@ -44,7 +40,26 @@
           id="nascimento"
           type="date"
           class="campo__escrita"
+          ngModel
+          required
+          maiorIdadeValidator
+          #nascimento="ngModel"
         />
+        <div
+          *ngIf="
+            (nascimento?.invalid && nascimento?.touched) || nascimento?.dirty
+          "
+        >
+          <app-mensagem
+            *ngIf="nascimento?.errors?.['required']"
+            mensagem="A data de nascimento deve ser
+          preenchido"
+          ></app-mensagem>
+          <app-mensagem
+            *ngIf="nascimento?.errors?.['maiorIdadeValidator']"
+            mensagem="O usuário deve ter mais de 18 anos"
+          ></app-mensagem>
+        </div>
       </div>
       <div class="formulario__campo">
         <label class="campo__etiqueta" for="telefone">Contato</label>
@@ -54,19 +69,86 @@
           type="tel"
           placeholder="(XX) XXXXX-XXXX"
           class="campo__escrita"
+          ngModel
+          required
+          pattern="(\(?\d{2}\)?\s?)(\d{5}\-?\d{4})"
         />
+        <div
+          *ngIf="
+            (f.controls['telefone']?.invalid &&
+              f.controls['telefone']?.touched) ||
+            f.controls['telefone']?.dirty
+          "
+        >
+          <span
+            class="erro__texto"
+            *ngIf="f.controls['telefone']?.errors?.['required']"
+            >O campo telefone deve ser preenchido</span
+          >
+          <span
+            class="erro__texto"
+            *ngIf="f.controls['telefone']?.errors?.['pattern']"
+            >O campo telefone não foi preenchido corretamento</span
+          >
+        </div>
       </div>
     </div>
     <div class="formulario__campo">
       <label class="campo__etiqueta" for="email">E-mail</label>
-      <input name="email" id="email" type="email" class="campo__escrita" />
+      <input
+        name="email"
+        id="email"
+        type="email"
+        class="campo__escrita"
+        ngModel
+        required
+        email
+      />
+      <div
+        *ngIf="
+          (f.controls['email']?.invalid && f.controls['email']?.touched) ||
+          f.controls['email']?.dirty
+        "
+      >
+        <span
+          class="erro__texto"
+          *ngIf="f.controls['email']?.errors?.['required']"
+          >O campo email deve ser preenchido</span
+        >
+        <span class="erro__texto" *ngIf="f.controls['email']?.errors?.['email']"
+          >O campo email deve serguir esse padrão: "exemplo@gmail.com</span
+        >
+      </div>
     </div>
 
     <h3 class="principal__subtitulo">Endereço</h3>
 
     <div class="formulario__campo">
       <label class="campo__etiqueta" for="cep">CEP</label>
-      <input name="cep" id="cep" class="campo__escrita" />
+      <input
+        name="cep"
+        id="cep"
+        class="campo__escrita"
+        ngModel
+        required
+        #cep="ngModel"
+        pattern="^(\d{5})(-?\d{3})$"
+        minlength="8"
+        maxlength="9"
+        (blur)="consultaCEP($event)"
+      />
+      <div *ngIf="(cep?.invalid && cep?.touched) || cep?.dirty">
+        <app-mensagem
+          *ngIf="cep?.errors?.['required']"
+          mensagem="O campo do cep é obrigatório"
+        >
+        </app-mensagem>
+        <app-mensagem
+          *ngIf="cep?.errors?.['pattern']"
+          mensagem="O campo do cep deve seguir este exemplo: 00000-00"
+        >
+        </app-mensagem>
+      </div>
       <div id="erro"></div>
     </div>
 
